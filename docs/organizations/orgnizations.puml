@@ -1,0 +1,123 @@
+---
+stoplight-id: dp15zhxks2i84
+---
+
+@startuml organizational-entities
+
+frame OrganizationPresenter {
+  entity Organization
+  
+  entity OrganizationDefinition {
+    name String
+    slug String
+  }
+
+  entity OrganizationMetadata {
+    id Int
+    type OrganizationType
+    created_at DateTime
+    updated_at DateTime
+  }
+
+  entity OrganizationInfo {
+    projects_info OrgProjectsInfo
+    members_info OrgMembersInfo
+    launches_info OrgLaunchesInfo
+    billing_info OrgBillingInfo
+  }
+
+  entity OrgProjectsInfo {
+    total_count Int
+  }
+  OrgProjectsInfo -up- OrganizationInfo
+
+  entity OrgMembersInfo {
+    total_count Int
+  }
+  OrgMembersInfo -up- OrganizationInfo
+
+  entity OrgLaunchesInfo {
+    last_occurred_at DateTime
+  }
+  OrgLaunchesInfo -up- OrganizationInfo
+
+  entity OrgBillingInfo {
+    plan_name String
+    storage_usage Int
+  }
+  OrgBillingInfo -up- OrganizationInfo
+
+  enum OrganizationType {
+    INTERNAL
+    PERSONAL
+    UPSA
+  }
+  OrganizationMetadata -- OrganizationType
+
+  Organization *-- OrganizationDefinition
+  Organization *-- OrganizationMetadata
+  Organization *-- OrganizationInfo
+
+}
+
+frame Members {
+
+  entity Member
+
+  entity MemberDefinition {
+    email String
+    role OrgRole
+  }
+  MemberDefinition -up-* Member
+
+  entity MemberMetadata {
+    id Int
+    created_at DateTime
+    updated_at DateTime
+    last_active_at DateTime
+  }
+  MemberMetadata -up-* Member
+
+  entity MemberInfo {
+    full_name String
+    projects_info MemberProjectsInfo
+  }
+  MemberInfo -up-* Member
+
+  enum UserType {
+    USER
+    ADMIN
+  }
+  UserType -up- MemberDefinition
+
+  enum OrgRole {
+    PROJECT_MANAGER
+    MEMBER
+  }
+  OrgRole -up- MemberDefinition
+
+  entity MemberProjectsInfo {
+    total_count Int
+  }
+  MemberProjectsInfo -up-* MemberInfo
+
+  entity MemberProject {
+    id Int
+    name String
+    slug String
+    key String
+    role ProjectRole
+  }
+
+  enum ProjectRole {
+    EDITOR
+    VIEWER
+  }
+  ProjectRole -up- MemberProject
+}
+
+frame Users {
+  entity User 
+}
+
+@enduml

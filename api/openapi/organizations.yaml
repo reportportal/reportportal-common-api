@@ -1,0 +1,695 @@
+openapi: 3.1.0
+x-stoplight:
+  id: hpx2e63mc8gcc
+info:
+  title: Organizations
+  version: '0.1'
+  description: ''
+  summary: API Collection for organizations management
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /organizations:
+    get:
+      summary: Get a list of organizations
+      tags:
+        - Organizations
+        - Ready for implementation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: ./models/offset.yaml
+                  - x-stoplight:
+                      id: nsdfmhu6y0tgj
+                    type: object
+                    properties:
+                      items:
+                        x-stoplight:
+                          id: p6c0g6dra4c11
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Organization'
+                          x-stoplight:
+                            id: 8zm4xnkiool8l
+                description: The list of organizations
+      operationId: get-organizations
+      description: Get a list of existing organizations.
+      parameters:
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/Order'
+      requestBody:
+        content: {}
+    post:
+      summary: Create a new organization
+      operationId: post-organizations
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '402':
+          description: Payment Required
+      description: |-
+        > **Enterprise edition feature** 
+        >
+        > Available only if an Organization plugin is enabled.
+
+        Create a new organization. Provide name and slug.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationDefinition'
+        description: |-
+          You can create an organization provide name and slug.
+          If the slug is not provided, it will be generated from the name.
+      tags:
+        - Organizations
+        - Ready for implementation
+  '/organizations/{org_id}':
+    get:
+      summary: Get organization information
+      tags:
+        - Organizations
+        - Ready for implementation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+      operationId: get-organizations-org_id
+      description: Provide organization information.
+    parameters:
+      - $ref: '#/components/parameters/OrganizationId'
+    put:
+      summary: Update organization
+      operationId: put-organizations-org_id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '402':
+          description: Payment Required
+      description: |-
+        > **Enterprise edition feature** 
+        >
+        > Available only if an Organization plugin is enabled.
+
+        Update organization information with the provided data.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationDefinition'
+        description: ''
+      tags:
+        - Organizations
+        - Ready for implementation
+      x-internal: false
+    patch:
+      summary: Partial organization update
+      operationId: patch-organizations-org_id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '402':
+          description: Payment Required
+      description: |-
+        > **Enterprise edition feature** 
+        >
+        > Available only if an Organization plugin is enabled.
+
+        Particular organization fields update via the [JSON Merge Patch standard](https://datatracker.ietf.org/doc/html/rfc7386).
+      requestBody:
+        content:
+          application/merge-patch+json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  x-stoplight:
+                    id: 6906m5222zvx6
+                slug:
+                  type: string
+                  x-stoplight:
+                    id: gt4uavhbr5qq9
+        description: 'Use PATCH with JSON Merge Patch standard, a specialized media type application/merge-patch+json for partial resource representation to update parts of resource objects.'
+      tags:
+        - Organizations
+        - Ready for implementation
+      x-internal: false
+    delete:
+      summary: Delete organization
+      operationId: delete-organizations-org_id
+      responses:
+        '204':
+          description: No Content
+        '402':
+          description: Payment Required
+      description: |-
+        > **Enterprise edition feature** 
+        >
+        > Available only if an Organization plugin is enabled.
+
+        Delete organization by identifier.
+      tags:
+        - Organizations
+        - Ready for implementation
+      x-internal: false
+  '/organizations/{org_id}/members':
+    get:
+      summary: Get organization information
+      tags:
+        - Organizations
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: ./models/offset.yaml
+                    x-stoplight:
+                      id: 67vo9o9k2fxf6
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        x-stoplight:
+                          id: nhn8okg3fl6au
+                        items:
+                          $ref: '#/components/schemas/Member'
+                          x-stoplight:
+                            id: 5j1d2qcvz0ukr
+      operationId: get-org_id-users
+      description: ''
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/Order'
+    parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Organization identifier
+    post:
+      summary: ''
+      operationId: post-org_id-user
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrgUserInfo'
+        '207':
+          description: Multi-Status (WebDAV)
+      description: Add user to the organization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Member'
+  '/organizations/{org_id}/members/{user_id}':
+    parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Organization identifier
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: User identifier
+    delete:
+      summary: Delete user from organization
+      operationId: delete-organizations-org_id-users
+      responses:
+        '204':
+          description: No Content
+      description: Delete user from organization
+    put:
+      summary: ''
+      operationId: put-org_id-user_id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationUser'
+      description: Update users settings in the organization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationUser'
+    get:
+      summary: ''
+      operationId: get-org_id-user_id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationUser'
+      description: Get user settings invthe organization
+    patch:
+      summary: ''
+      operationId: patch-organizations-org_id-users-user_id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationUser'
+      description: Update users settings in the organization
+      requestBody:
+        content:
+          application/merge-patch+json:
+            schema:
+              $ref: '#/components/schemas/OrganizationUser'
+        description: 'Use PATCH with JSON Merge Patch standard, a specialized media type application/merge-patch+json for partial resource representation to update parts of resource objects.'
+  '/organizations/{org_id}/projects':
+    get:
+      summary: Get organization information
+      tags:
+        - Organizations
+      responses: {}
+      operationId: get-org_id-projects
+      description: ''
+    parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Organization identifier
+    post:
+      summary: ''
+      operationId: post-org_id-project
+      responses:
+        '200':
+          description: OK
+  '/organizations/{org_id}/settings':
+    get:
+      summary: Get organization information
+      tags:
+        - Organizations
+      responses: {}
+      operationId: get-organizations-org_id
+      description: ''
+    parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Organization identifier
+    put:
+      summary: ''
+      operationId: put-organizations-org_id
+      responses:
+        '200':
+          description: OK
+      description: Enterprise edition feature.
+    patch:
+      summary: ''
+      operationId: patch-organizations-org_id
+      responses:
+        '200':
+          description: OK
+      description: Enterprise edition feature.
+    delete:
+      summary: ''
+      operationId: delete-organizations-org_id
+      responses:
+        '200':
+          description: OK
+      description: Enterprise edition feature.
+components:
+  schemas:
+    OrganizationDefinition:
+      title: Organization basic definition
+      x-stoplight:
+        id: 2gyt1v3d2gfmm
+      type: object
+      examples: []
+      description: Basic information provided by the client.
+      properties:
+        name:
+          type: string
+          x-stoplight:
+            id: dz5igu0m6iy9o
+          description: Organization display name.
+        slug:
+          type: string
+          x-stoplight:
+            id: hsav6x2ci2qt1
+          description: |-
+            Unique identifying part.
+            Generated according to the organization name if not specified by the user.
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      required:
+        - name
+    OrganizationMetadata:
+      title: Organization metadata
+      x-stoplight:
+        id: 08jgykhqykh7b
+      description: Organization metadata. Represent generated fields.
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Organization ReportPortal ID.
+        type:
+          type: string
+          x-stoplight:
+            id: 4nf6lordbrqag
+          enum:
+            - INTERNAL
+            - PERSONAL
+            - EXTERNAL
+          description: |-
+            Type for automatization purposes.
+
+            There are three types:
+            - INTERNAL: created by API request.
+            - PERSONAL: created for a user after the user creating. Only Enterprise edition feature.
+            - UPSA: created for internal integrations.
+        created_at:
+          type: string
+          x-stoplight:
+            id: murxta40l19cz
+          format: date-time
+          description: Creation date.
+        updated_at:
+          type: string
+          x-stoplight:
+            id: wy58s9p7s4l81
+          format: date-time
+          description: Last update date.
+    OrganizationInfo:
+      title: Organization information
+      x-stoplight:
+        id: mvjaoy2fofepj
+      type: object
+      description: Related information about the organization.
+      properties:
+        members_info:
+          type: object
+          x-stoplight:
+            id: aau80pjhj0ecs
+          description: General information about the organization members.
+          properties:
+            total_count:
+              type: integer
+              x-stoplight:
+                id: iumvdhplkj4h0
+              minimum: 0
+              description: Total count of members.
+        projects_info:
+          type: object
+          x-stoplight:
+            id: gfcxxarpmzbsn
+          description: General information about the organization projects.
+          properties:
+            total_count:
+              type: integer
+              x-stoplight:
+                id: ypqfuxxevu2si
+              minimum: 0
+              description: Total count of projects in the organization.
+        launches_info:
+          type: object
+          x-stoplight:
+            id: cz8q9j1tg4ak0
+          description: General information about the organization launches.
+          properties:
+            last_occurred_at:
+              type: string
+              x-stoplight:
+                id: ry81p33pd7rr1
+              format: date-time
+              description: Last launch occurrence date.
+        billing_info:
+          type: object
+          x-stoplight:
+            id: kp0guqf27icwi
+          description: |-
+            General information about the organization billing.
+            Available only if a Billing plugin is enabled.
+          properties:
+            plan_name:
+              type: string
+              x-stoplight:
+                id: dg7lhxj6xspo9
+              description: Plan name.
+            storage_usage:
+              type: integer
+              x-stoplight:
+                id: vbbgb3u6pyequ
+              minimum: 0
+              maximum: 100
+              description: Storage usage in percents.
+    Organization:
+      title: Organization
+      x-stoplight:
+        id: lzs7p3khz8n9d
+      examples: []
+      description: Organization complete information.
+      allOf:
+        - $ref: '#/components/schemas/OrganizationMetadata'
+          x-stoplight:
+            id: rb1se3yql0uil
+        - $ref: '#/components/schemas/OrganizationDefinition'
+        - $ref: '#/components/schemas/OrganizationInfo'
+          x-stoplight:
+            id: 64kdwn8nva4jg
+    Member:
+      title: Organization user
+      x-stoplight:
+        id: 290y8u7rv2whx
+      type: object
+      properties:
+        id:
+          type: integer
+          x-stoplight:
+            id: 8cvr7o8alfq5b
+          format: int64
+        login:
+          type: string
+          x-stoplight:
+            id: g1yy53imn75w1
+        email:
+          type: string
+          x-stoplight:
+            id: tn2iv2c88jbbk
+          format: email
+        full_name:
+          type: string
+          x-stoplight:
+            id: fe0s6tnyozrxs
+        user_type:
+          type: string
+          x-stoplight:
+            id: srm3ph4vw6zrb
+        role:
+          type: string
+          x-stoplight:
+            id: kpd5hjr3pa7mo
+          description: Organization role
+        projects:
+          type: array
+          x-stoplight:
+            id: j727wl4gsxms7
+          format: uri
+          items:
+            x-stoplight:
+              id: 5kkw98zhayvya
+            type: object
+            properties:
+              id:
+                type: integer
+                x-stoplight:
+                  id: x8yvv69qqw9g1
+                format: int64
+              name:
+                type: string
+                x-stoplight:
+                  id: caj83cmho12c6
+              slug:
+                type: string
+                x-stoplight:
+                  id: 79dwamczihu7n
+              key:
+                type: string
+                x-stoplight:
+                  id: txcdvngzf9vxx
+              role:
+                type: string
+                x-stoplight:
+                  id: eib32nj9zfbw5
+    OrganizationProject:
+      title: Organization project
+      x-stoplight:
+        id: 7qhfm2mljfnab
+      type: object
+      properties:
+        id:
+          type: string
+        users:
+          type: array
+          x-stoplight:
+            id: 7bvv21b3xbg3o
+          items:
+            x-stoplight:
+              id: qq16ytcg8sdpy
+            type: object
+            properties:
+              id:
+                type: integer
+                x-stoplight:
+                  id: bn9r3o44qsi7v
+                format: int64
+              href:
+                type: string
+                x-stoplight:
+                  id: rynxepiwb70or
+                format: uri
+    OrgLaunchSettings:
+      title: OrganizationSettings
+      x-stoplight:
+        id: 870b1czmtb2s6
+      type: object
+      properties:
+        duration:
+          type: string
+          x-stoplight:
+            id: f59ejwit0d152
+          format: duration
+        '':
+          type: string
+          x-stoplight:
+            id: 685cyif333065
+    OrgIntegrationSettings:
+      title: OrganizationSettings
+      x-stoplight:
+        id: 9w0g4scmjx4eh
+      type: object
+      properties:
+        duration:
+          type: string
+          x-stoplight:
+            id: f59ejwit0d152
+          format: duration
+        '':
+          type: string
+          x-stoplight:
+            id: 685cyif333065
+    OrgBillingSettings:
+      title: OrganizationSettings
+      x-stoplight:
+        id: e3lvf0kvy0m73
+      type: object
+      properties:
+        duration:
+          type: string
+          x-stoplight:
+            id: f59ejwit0d152
+          format: duration
+        '':
+          type: string
+          x-stoplight:
+            id: 685cyif333065
+    OrgNotificationSettings:
+      title: OrganizationSettings
+      x-stoplight:
+        id: kngx83xbxpy6y
+      type: object
+      properties:
+        duration:
+          type: string
+          x-stoplight:
+            id: f59ejwit0d152
+          format: duration
+        '':
+          type: string
+          x-stoplight:
+            id: 685cyif333065
+  parameters:
+    OrganizationId:
+      name: org_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Organization identifier
+    Limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: string
+      description: The limit used for this page of results. This will be the same as the limit query parameter unless it exceeded the maximum value allowed for this API endpoint
+    Offset:
+      name: offset
+      in: query
+      required: false
+      schema:
+        type: string
+      description: The offset used for this page of results
+    Sort:
+      name: sort
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Indicate sort by field
+    Order:
+      name: order
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Indicate sorting direction
+    UserId:
+      name: user_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: User identifier
+  requestBodies: {}
+tags:
+  - name: Members
+  - name: Organizations
+  - name: Projects
+  - name: Ready for implementation

@@ -1,0 +1,14 @@
+title: Project details
+x-stoplight:
+  id: 8xas9tgve4cfk
+allOf:
+  - type: object
+    properties:
+      name:
+        type: string
+        x-stoplight:
+          id: ia7sekdpu4yac
+        description: Display project name.
+    required:
+      - name
+  - $ref: ../Slug.yaml

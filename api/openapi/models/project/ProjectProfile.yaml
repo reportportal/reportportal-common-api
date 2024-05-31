@@ -1,0 +1,12 @@
+title: Project profile
+x-stoplight:
+  id: ur5ebd3h35b5c
+allOf:
+  - $ref: ./ProjectInfo.yaml
+  - type: object
+    x-stoplight:
+      id: zjk54j90siijv
+    properties:
+      relationships:
+        $ref: ./ProjectRelation.yaml
+description: 'Comprehensive information about a project.'
